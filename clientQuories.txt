@@ -26,3 +26,10 @@ query getUserById {
     email
   }
 }
+
+query getQuoteById($userId: ID!){
+  iquote(by: $userId){
+    name
+    by
+  }
+}

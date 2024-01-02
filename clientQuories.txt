@@ -17,3 +17,12 @@ query getAllQuotes{
     by
   }
 }
+
+query getUserById {
+  user(id:"23131"){
+    id,
+    firstName,
+    lastName,
+    email
+  }
+}

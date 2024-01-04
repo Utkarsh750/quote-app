@@ -1,4 +1,5 @@
 import { users, quotes } from "./db.js";
+import { randomBytes } from 'crypto'
 
 const resolvers = {
   Query: {
@@ -10,6 +11,17 @@ const resolvers = {
   User: {
     quotes: (ur) => quotes.filter((quote) => quote.by == ur.id),
   },
+
+  Mutation: {
+    signupUserDummy: (_, { userNew }) => {
+      const id = randomBytes(5).toString("hex")
+      users.push({
+        id,
+        ...userNew
+      })
+      return users.find(user => user.id == id)
+    }
+  }
 };
 
 export default resolvers;

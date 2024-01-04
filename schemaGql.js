@@ -21,11 +21,13 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    signupUserDummy(
-      firstName: String!
-      lastName: String!
-      email: String!
-      password: String!
-    ): User
+    signupUserDummy(userNew: UserInput): User
+  }
+
+  input UserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
   }
 `;

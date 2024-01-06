@@ -4,23 +4,22 @@ import { typeDefs } from "./schemaGql.js";
 import mongoose from "mongoose";
 import { MONGO_URL } from "./config.js";
 
-// mongodb+srv://megayt750:<password>@graphql.evo1wji.mongodb.net/?retryWrites=true&w=majority
-
-
-mongoose.connect(MONGO_URL , {
-  useNewUrlParser:true,
-  useUnifiedTopology: true
-})
+mongoose.connect(MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 mongoose.connection.on("connected", () => {
-  console.log("connected to mongodb")
-})
+  console.log("connected to mongodb");
+});
 
 mongoose.connection.on("error", (err) => {
-  console.log("error connecting", err)
-})
+  console.log("error connecting", err);
+});
 
 // import models
+import "./models/Quotes.js";
+import "./models/User.js";
 
 import resolvers from "./resolvers.js";
 

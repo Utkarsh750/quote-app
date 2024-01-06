@@ -33,3 +33,20 @@ query getQuoteById($userId: ID!){
     by
   }
 }
+
+__________
+mutation SigninUser($userSignin:UserSigninInput!){
+  user:signinUser(userSignin:$userSignin){
+    token
+  }
+}
+
+___-------
+mutation createUser($userNew:UserInput!){
+  user:signupUser(userNew:$userNew){
+    _id
+    firstName
+    lastName
+    email
+  }
+}

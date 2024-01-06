@@ -6,16 +6,18 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "./config.js";
 
 const User = mongoose.model("User");
+const Quote = mongoose.model("Quote");
 
 const resolvers = {
   Query: {
-    users: () => users,
-    user: (_, { _id }) => users.find((user) => user._id == _id),
-    quotes: () => quotes,
-    iquote: (_, { by }) => quotes.filter((quote) => quote.by == by),
+    // users: () => users,
+    users: async () => await User.find({}),
+    user: async (_, { _id }) => await User.findOne({ _id }), //((user) => user._id == _id),
+    quotes: async () => await Quote.find({}).populate("by", "_id, firstName"), //same as line 14
+    iquote: async (_, { by }) => await Quote.find({ by }), //filter((quote) => quote.by == by),
   },
   User: {
-    quotes: (ur) => quotes.filter((quote) => quote.by == ur._id),
+    quotes: async (ur) => await Quote.find({ by: ur._id }), //filter((quote) => quote.by == ur._id),
   },
 
   Mutation: {
@@ -33,8 +35,8 @@ const resolvers = {
 
       return await newUser.save();
     },
-    signinUser: async (_,{ userSignin }) => {
-      const user = await User.findOne({ email:userSignin.email });
+    signinUser: async (_, { userSignin }) => {
+      const user = await User.findOne({ email: userSignin.email });
       if (!user) {
         throw new Error("User doesn't exists with this email");
       }
@@ -43,8 +45,19 @@ const resolvers = {
       if (!doMatch) {
         throw new Error("email or password is invalid");
       }
-      const token = jwt.sign({ userId:user._id }, JWT_SECRET);
-      return {token};
+      const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+      return { token };
+    },
+    createQuote: (_, { name }, { userId }) => {
+      if (!userId) throw new Error("You must logged in");
+
+      const newQuote = new Quote({
+        name,
+        by: userId,
+      });
+
+      newQuote.save();
+      return "Quote saved successfully";
     },
   },
 };

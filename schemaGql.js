@@ -4,19 +4,28 @@ export const typeDefs = gql`
   type Query {
     users: [User]
     user(_id: ID!): User
-    quotes: [Quote]
+    quotes: [QuoteWithName]
     iquote(by: ID): [Quote]
+  }
+
+  type QuoteWithName {
+    name: String
+    by: IdName
+  }
+  type IdName {
+    _id: String
+    firstName: String
   }
   type User {
     _id: ID!
-    firstName: String
-    lastName: String
-    email: String
+    firstName: String!
+    lastName: String!
+    email: String!
     quotes: [Quote]
   }
 
   type Quote {
-    name: String
+    name: String!
     by: ID!
   }
 
@@ -26,6 +35,7 @@ export const typeDefs = gql`
   type Mutation {
     signupUser(userNew: UserInput!): User
     signinUser(userSignin: UserSigninInput!): Token
+    createQuote(name: String): String
   }
 
   input UserInput {
